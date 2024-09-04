@@ -15,8 +15,7 @@ public class ChessPiece extends JButton implements ActionListener
         xPosition = row;
         yPosition = col;
         this.addActionListener(this);
-        ChessIcons chessIcons = new ChessIcons();
-        icons = chessIcons.getIcons();
+        icons = ChessIcons.getIcons();
     }
 
     public void actionPerformed(ActionEvent e)

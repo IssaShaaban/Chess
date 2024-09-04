@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class ChessIcons
 {
-    private final HashMap<String, Icon> icons = new HashMap<>();
+    private static final HashMap<String, Icon> icons = new HashMap<>();
 
     public ChessIcons()
     {
@@ -23,14 +23,14 @@ public class ChessIcons
         icons.put("bKnight",resizeIcon(new ImageIcon("Icons/bKnight.png")));
     }
 
-    private Icon resizeIcon(ImageIcon icon)
+    private static Icon resizeIcon(ImageIcon icon)
     {
         Image img = icon.getImage();
         Image resizedImage = img.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         return new ImageIcon(resizedImage);
     }
 
-    public  HashMap<String,Icon> getIcons()
+    public static HashMap<String,Icon> getIcons()
     {
         return icons;
     }
