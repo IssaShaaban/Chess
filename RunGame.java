@@ -1,16 +1,21 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class RunGame {
+public class RunGame
+{
+    public static void main(String[] args)
+    {
+        JFrame frame = new JFrame("Chess Game by Issa Shaaban");
+        ChessBoard board = new ChessBoard();
+        PlayerHandle player1 = new PlayerHandle("Player1");
+        PlayerHandle player2 = new PlayerHandle("Player2");
 
-    public static void main(String[] args) {
-
-        JFrame frame = new JFrame("Chess");
-        JLabel top = new JLabel("text");
-        //ChessBoard g = new ChessBoard();
-        frame.add(top);
-        //frame.add(g);
         frame.setSize(800, 600);
+        frame.add(player1,BorderLayout.NORTH);
+        frame.add(board,BorderLayout.CENTER);
+        frame.add(player2,BorderLayout.SOUTH);
+
         frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
