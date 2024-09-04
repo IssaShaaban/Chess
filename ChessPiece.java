@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -31,10 +30,4 @@ public class ChessPiece extends JButton implements ActionListener
         this.icon = icon;
         this.setIcon(useIcon);
     }
-
-    public String getPieceIcon()
-    {
-        return icon;
-    }
-
 }
