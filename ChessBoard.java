@@ -3,8 +3,8 @@ import java.awt.*;
 
 public class ChessBoard extends JPanel
 {
-
-    private final ChessPiece[][] board = new ChessPiece[8][8];
+    private ChessPiece[][] board = new ChessPiece[8][8];
+    private boolean canMove = false;
 
     public ChessBoard()
     {
@@ -15,7 +15,47 @@ public class ChessBoard extends JPanel
         {
             for (int col=0; col<8; col++)
             {
-                ChessPiece piece = new ChessPiece(row, col);
+                ChessPiece piece;
+
+                if (row == 1)
+                    piece = new Pawn(row,col,false,this);
+
+                else if (row == 6)
+                    piece = new Pawn(row,col,true,this);
+
+                else if (row == 0 && (col == 0 || col == 7))
+                    piece = new Rook(row,col,false);
+
+                else if (row == 7 && (col == 0 || col == 7))
+                    piece = new Rook(row,col,true);
+
+                else if (row == 0 && (col == 1 || col == 6))
+                    piece = new Knight(row,col,false);
+
+                else if (row == 7 && (col == 1 || col == 6))
+                    piece = new Knight(row,col,true);
+
+                else if (row == 0 && (col == 2 || col == 5))
+                    piece = new Bishop(row,col,false);
+
+                else if (row == 7 && (col == 2 || col == 5))
+                    piece = new Bishop(row,col,true);
+
+                else if (row == 0 && col == 3)
+                    piece = new King(row,col,false);
+
+                else if (row == 7 && col == 3)
+                    piece = new King(row,col,true);
+
+                else if (row == 0 && col == 4)
+                    piece = new Queen(row,col,false);
+
+                else if (row == 7 && col == 4)
+                    piece = new Queen(row,col,true);
+
+                else
+                    piece = new EmptyPiece(row,col);
+
                 board[row][col] = piece;
 
                 if ((row + col) % 2 == 0)
@@ -26,36 +66,25 @@ public class ChessBoard extends JPanel
                 this.add(piece);
             }
         }
-        setIcons();
     }
 
-    private void setIcons()
+    public void setCanMove(boolean canMove)
     {
-        for (int col=0; col<8; col++)
-        {
-            board[1][col].setPieceIcon("wPawn");
-            board[6][col].setPieceIcon("bPawn");
-        }
+        this.canMove = canMove;
+    }
 
-        board[0][0].setPieceIcon("wRook");
-        board[0][7].setPieceIcon("wRook");
-        board[7][0].setPieceIcon("bRook");
-        board[7][7].setPieceIcon("bRook");
+    public boolean getCanMove()
+    {
+        return canMove;
+    }
 
-        board[0][1].setPieceIcon("wKnight");
-        board[0][6].setPieceIcon("wKnight");
-        board[7][1].setPieceIcon("bKnight");
-        board[7][6].setPieceIcon("bKnight");
+    public ChessPiece[][] getBoard()
+    {
+        return board;
+    }
 
-        board[0][2].setPieceIcon("wBishop");
-        board[0][5].setPieceIcon("wBishop");
-        board[7][2].setPieceIcon("bBishop");
-        board[7][5].setPieceIcon("bBishop");
-
-        board[0][3].setPieceIcon("wKing");
-        board[7][3].setPieceIcon("bKing");
-
-        board[0][4].setPieceIcon("wQueen");
-        board[7][4].setPieceIcon("bQueen");
+    public void setPiecePos(int row, int col, ChessPiece piece)
+    {
+        board[row][col] = piece;
     }
 }
