@@ -1,15 +1,10 @@
-public class Rook extends ChessPiece {
+import java.awt.event.ActionEvent;
 
-    private int xPosition;
-    private int yPosition;
-    private boolean isBlack;
-
-    public Rook(int row, int col, boolean isBlack)
+public class Rook extends ChessPiece
+{
+    public Rook(int row, int col,boolean isBlack,ChessBoard board)
     {
-        super(row,col);
-        xPosition = row;
-        yPosition = col;
-        this.isBlack = isBlack;
+        super(row,col,isBlack,board);
 
         if (isBlack)
         {

@@ -2,22 +2,18 @@ import java.awt.event.ActionEvent;
 
 public class EmptyPiece extends ChessPiece
 {
-    ChessBoard board;
-    private int xPosition;
-    private int yPosition;
-
-    public EmptyPiece(int row, int col)
+    public EmptyPiece(int row, int col,ChessBoard board)
     {
-        super(row,col);
-        this.board = board;
-        xPosition = row;
-        yPosition = col;
+        super(row,col,true,board);
     }
 
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        //if (board.getCanMove())
-        //TODO move to positon
+        if (this.getBoard().getCurrentPiece() != null)
+        {
+            this.getBoard().setPiecePos(this.getRow(), this.getCol(), this.getBoard().getCurrentPiece());
+            this.getBoard().setCurrentPiece(null);
+        }
     }
 }

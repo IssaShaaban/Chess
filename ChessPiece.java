@@ -6,22 +6,29 @@ import java.util.HashMap;
 public abstract class ChessPiece extends JButton implements ActionListener
 {
     private final HashMap<String,Icon> icons;
-    private int xPoisiton;
-    private int yPoisiton;
-    private boolean canMove = false;
-    private ChessPiece currentPiece;
+    private int row, col;
+    private final ChessBoard board;
+    private boolean isBlack;
 
-    public ChessPiece(int row,int col)
+    public ChessPiece(int row,int col,boolean isBlack,ChessBoard board)
     {
         this.addActionListener(this);
-        xPoisiton = row;
-        yPoisiton = col;
+        this.row = row;
+        this.col = col;
+        this.board = board;
+        this.isBlack = isBlack;
         icons = ChessIcons.getIcons();
     }
 
     public void actionPerformed(ActionEvent e)
     {
-        System.out.println("Pressed " + this.getClass().getName() + " " + this.getXPoisiton() + " " + this.getYPoisiton());
+        if (this.getBoard().getCurrentPiece() == null)
+        {
+            this.getBoard().highlightPiece(this.getRow(),this.getCol());
+            this.getBoard().setCurrentPiece(this);
+        }
+
+        System.out.println("Pressed " + this.getClass().getName() + " " + this.getRow() + " " + this.getCol());
     }
 
     public void setPieceIcon(String icon)
@@ -30,13 +37,17 @@ public abstract class ChessPiece extends JButton implements ActionListener
         this.setIcon(useIcon);
     }
 
-    public int getXPoisiton()
+    public int getRow() {return row;}
+    public int getCol() {return col;}
+
+    public void setPosition(int row, int col)
     {
-        return xPoisiton;
+        this.row = row;
+        this.col = col;
     }
 
-    public int getYPoisiton()
+    public ChessBoard getBoard()
     {
-        return yPoisiton;
+        return board;
     }
 }

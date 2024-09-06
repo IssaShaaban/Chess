@@ -2,21 +2,9 @@ import java.awt.event.ActionEvent;
 
 public class Pawn extends ChessPiece
 {
-    ChessBoard board;
-    private int xPosition;
-    private int yPosition;
-    private int xNewPosition;
-    private int yNewPosition;
-    private boolean isBlack;
-    private boolean canMove = false;
-
-    public Pawn(int row, int col, boolean isBlack,ChessBoard board)
+    public Pawn(int row, int col,boolean isBlack,ChessBoard board)
     {
-        super(row,col);
-        this.board = board;
-        xPosition = row;
-        yPosition = col;
-        this.isBlack = isBlack;
+        super(row,col,isBlack,board);
 
         if (isBlack)
         {
@@ -26,14 +14,8 @@ public class Pawn extends ChessPiece
             this.setPieceIcon("wPawn");
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {
-        System.out.println("Pressed " + this.getClass().getName() + " " + this.getXPoisiton() + " " + this.getYPoisiton() + " " + this.isBlack);
-    }
-
     private void moveForward()
     {
-        board.setPiecePos(xNewPosition,yNewPosition,this);
+        //board.setPiecePos(newRow,newCol,this);
     }
 }

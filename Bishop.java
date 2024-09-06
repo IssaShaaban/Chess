@@ -1,15 +1,10 @@
-public class Bishop extends ChessPiece {
+import java.awt.event.ActionEvent;
 
-    private int xPosition;
-    private int yPosition;
-    private boolean isBlack;
-
-    public Bishop(int row, int col, boolean isBlack)
+public class Bishop extends ChessPiece
+{
+    public Bishop(int row, int col,boolean isBlack,ChessBoard board)
     {
-        super(row,col);
-        xPosition = row;
-        yPosition = col;
-        this.isBlack = isBlack;
+        super(row,col,isBlack,board);
 
         if (isBlack)
         {
@@ -17,5 +12,14 @@ public class Bishop extends ChessPiece {
         }
         else
             this.setPieceIcon("wBishop");
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        if (this.getBoard().getCurrentPiece() == null)
+            this.getBoard().setCurrentPiece(this);
+
+        System.out.println("Pressed " + this.getClass().getName() + " " + this.getRow() + " " + this.getCol());
     }
 }

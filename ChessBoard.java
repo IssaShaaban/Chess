@@ -5,6 +5,8 @@ public class ChessBoard extends JPanel
 {
     private ChessPiece[][] board = new ChessPiece[8][8];
     private boolean canMove = false;
+    private ChessPiece currentPiece = null;
+    private ChessPiece gettingReplaced = null;
 
     public ChessBoard()
     {
@@ -15,76 +17,104 @@ public class ChessBoard extends JPanel
         {
             for (int col=0; col<8; col++)
             {
-                ChessPiece piece;
-
                 if (row == 1)
-                    piece = new Pawn(row,col,false,this);
+                    board[row][col] = new Pawn(row,col,false,this);
 
                 else if (row == 6)
-                    piece = new Pawn(row,col,true,this);
+                    board[row][col] = new Pawn(row,col,true,this);
 
                 else if (row == 0 && (col == 0 || col == 7))
-                    piece = new Rook(row,col,false);
+                    board[row][col] = new Rook(row,col,false,this);
 
                 else if (row == 7 && (col == 0 || col == 7))
-                    piece = new Rook(row,col,true);
+                    board[row][col] = new Rook(row,col,true,this);
 
                 else if (row == 0 && (col == 1 || col == 6))
-                    piece = new Knight(row,col,false);
+                    board[row][col] = new Knight(row,col,false,this);
 
                 else if (row == 7 && (col == 1 || col == 6))
-                    piece = new Knight(row,col,true);
+                    board[row][col] = new Knight(row,col,true,this);
 
                 else if (row == 0 && (col == 2 || col == 5))
-                    piece = new Bishop(row,col,false);
+                    board[row][col] = new Bishop(row,col,false,this);
 
                 else if (row == 7 && (col == 2 || col == 5))
-                    piece = new Bishop(row,col,true);
+                    board[row][col] = new Bishop(row,col,true,this);
 
                 else if (row == 0 && col == 3)
-                    piece = new King(row,col,false);
+                    board[row][col] = new King(row,col,false,this);
 
                 else if (row == 7 && col == 3)
-                    piece = new King(row,col,true);
+                    board[row][col] = new King(row,col,true,this);
 
                 else if (row == 0 && col == 4)
-                    piece = new Queen(row,col,false);
+                    board[row][col] = new Queen(row,col,false,this);
 
                 else if (row == 7 && col == 4)
-                    piece = new Queen(row,col,true);
+                    board[row][col] = new Queen(row,col,true,this);
 
                 else
-                    piece = new EmptyPiece(row,col);
+                    board[row][col] = new EmptyPiece(row,col,this);
 
-                board[row][col] = piece;
-
-                if ((row + col) % 2 == 0)
-                    piece.setBackground(Color.WHITE);
-                else
-                    piece.setBackground(Color.BLACK);
-
-                this.add(piece);
+                addPiece(row,col);
             }
         }
     }
 
-    public void setCanMove(boolean canMove)
+    public void setPiecePos(int newRow, int newCol, ChessPiece piece)
     {
-        this.canMove = canMove;
+        int oldRow = piece.getRow();
+        int oldCol = piece.getCol();
+
+        board[oldRow][oldCol] = new EmptyPiece(oldRow, oldCol, this);
+        board[newRow][newCol] = piece;
+        piece.setPosition(newRow, newCol);
+
+        this.removeAll();
+        for (int row=0; row<8; row++)
+        {
+            for (int col = 0; col < 8; col++)
+            {
+                addPiece(row,col);
+            }
+        }
+
+        this.revalidate();
+        this.repaint();
     }
 
-    public boolean getCanMove()
+    public void addPiece(int row, int col)
     {
-        return canMove;
+        if ((row + col) % 2 == 0)
+            board[row][col].setBackground(Color.WHITE);
+        else
+            board[row][col].setBackground(Color.BLACK);
+
+        this.add(board[row][col]);
     }
 
-    public ChessPiece[][] getBoard()
+    public ChessPiece getCurrentPiece()
     {
-        return board;
+        return currentPiece;
     }
 
-    public void setPiecePos(int row, int col, ChessPiece piece)
+    public void setCurrentPiece(ChessPiece currentPiece)
     {
-        board[row][col] = piece;
+        this.currentPiece = currentPiece;
+    }
+
+    public ChessPiece getGettingReplaced()
+    {
+        return gettingReplaced;
+    }
+
+    public void setGettingReplaced(ChessPiece gettingReplaced)
+    {
+        this.gettingReplaced = gettingReplaced;
+    }
+
+    public void highlightPiece(int row, int col)
+    {
+        board[row][col].setBackground(new Color(236, 240, 194));
     }
 }
