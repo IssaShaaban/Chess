@@ -3,7 +3,6 @@ import java.awt.event.ActionEvent;
 
 public class EmptyPiece extends ChessPiece
 {
-    ChessPiece newPiece = null;
     public EmptyPiece(int row, int col,ChessBoard board)
     {
         super(row,col,true,board);
@@ -17,14 +16,15 @@ public class EmptyPiece extends ChessPiece
             newPiece = this.getBoard().getCurrentPiece();
             if (newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(), this.getRow(), this.getCol()))
             {
-                this.getBoard().setPiecePos(this.getRow(), this.getCol(), this.getBoard().getCurrentPiece());
+                this.getBoard().setPiecePos(this.getRow(), this.getCol(), newPiece);
                 this.getBoard().setCurrentPiece(null);
             }
             else
-                JOptionPane.showMessageDialog(this.getBoard(), "Invalid Move");
+                JOptionPane.showMessageDialog(this.getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
 
             newPiece = null;
         }
+        printDebug();
     }
 
     @Override

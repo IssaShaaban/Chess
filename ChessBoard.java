@@ -6,7 +6,6 @@ public class ChessBoard extends JPanel
     private ChessPiece[][] board = new ChessPiece[8][8];
     private boolean canMove = false;
     private ChessPiece currentPiece = null;
-    private ChessPiece gettingReplaced = null;
 
     public ChessBoard()
     {
@@ -101,16 +100,6 @@ public class ChessBoard extends JPanel
     public void setCurrentPiece(ChessPiece currentPiece)
     {
         this.currentPiece = currentPiece;
-    }
-
-    public ChessPiece getGettingReplaced()
-    {
-        return gettingReplaced;
-    }
-
-    public void setGettingReplaced(ChessPiece gettingReplaced)
-    {
-        this.gettingReplaced = gettingReplaced;
     }
 
     public void highlightPiece(int row, int col)

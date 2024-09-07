@@ -14,7 +14,26 @@ public class King extends ChessPiece
             this.setPieceIcon("wKing");
     }
     @Override
-    public boolean isValidMove(int row, int col, int newRow, int newCol) {
+    public boolean isValidMove(int row, int col, int newRow, int newCol)
+    {
+        if (this.isBlack() && (!getBoard().getPieceAt(newRow, newCol).isBlack() || getBoard().getPieceAt(newRow,newCol) instanceof EmptyPiece))
+            return kingMoves(row,col,newRow,newCol);
+
+        else if (!this.isBlack() && (getBoard().getPieceAt(newRow, newCol).isBlack() || getBoard().getPieceAt(newRow,newCol) instanceof EmptyPiece))
+            return kingMoves(row,col,newRow,newCol);
+
         return false;
+    }
+
+    private boolean kingMoves(int row, int col, int newRow, int newCol)
+    {
+        return (newRow == row && newCol == col - 1) ||
+                (newRow == row && newCol == col + 1) ||
+                (newRow == row - 1 && newCol == col - 1) ||
+                (newRow == row - 1 && newCol == col) ||
+                (newRow == row - 1 && newCol == col + 1) ||
+                (newRow == row + 1 && newCol == col - 1) ||
+                (newRow == row + 1 && newCol == col) ||
+                (newRow == row + 1 && newCol == col + 1);
     }
 }

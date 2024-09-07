@@ -9,6 +9,7 @@ public abstract class ChessPiece extends JButton implements ActionListener
     private int row, col;
     private final ChessBoard board;
     private final boolean isBlack;
+    ChessPiece newPiece = null;
 
     public ChessPiece(int row,int col,boolean isBlack,ChessBoard board)
     {
@@ -22,13 +23,32 @@ public abstract class ChessPiece extends JButton implements ActionListener
 
     public void actionPerformed(ActionEvent e)
     {
-        if (this.getBoard().getCurrentPiece() == null)
+        if (this.getBoard().getCurrentPiece() == this)
+        {
+            this.getBoard().unHighlight(this.getRow(),this.getCol());
+            this.getBoard().setCurrentPiece(null);
+        }
+
+        else if (this.getBoard().getCurrentPiece() != null)
+        {
+            newPiece = this.getBoard().getCurrentPiece();
+            if (newPiece != null && newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(), this.getRow(), this.getCol()))
+            {
+                this.getBoard().setPiecePos(this.getRow(), this.getCol(), this.getBoard().getCurrentPiece());
+                this.getBoard().setCurrentPiece(null);
+            }
+            else
+                JOptionPane.showMessageDialog(this.getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
+
+            newPiece = null;
+            printDebug();
+        }
+
+        else if (this.getBoard().getCurrentPiece() == null)
         {
             this.getBoard().highlightPiece(this.getRow(),this.getCol());
             this.getBoard().setCurrentPiece(this);
         }
-
-        System.out.println("Pressed " + this.getClass().getName() + " " + this.getRow() + " " + this.getCol());
     }
 
     public void setPieceIcon(String icon)
@@ -56,5 +76,10 @@ public abstract class ChessPiece extends JButton implements ActionListener
     public boolean isBlack()
     {
         return isBlack;
+    }
+
+    public void printDebug()
+    {
+        System.out.println("Pressed " + this.getClass().getName() + " " + this.getRow() + " " + this.getCol());
     }
 }
