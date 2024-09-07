@@ -125,4 +125,9 @@ public class ChessBoard extends JPanel
         else
             board[row][col].setBackground(Color.BLACK);
     }
+
+    public ChessPiece getPieceAt(int row, int col)
+    {
+        return board[row][col];
+    }
 }
