@@ -82,4 +82,14 @@ public abstract class ChessPiece extends JButton implements ActionListener
     {
         System.out.println("Pressed " + this.getClass().getName() + " " + this.getRow() + " " + this.getCol());
     }
+
+    public boolean blackTakingWhite(int newRow,int newCol)
+    {
+        return (isBlack() && (!getBoard().getPieceAt(newRow, newCol).isBlack() || getBoard().getPieceAt(newRow,newCol) instanceof EmptyPiece));
+    }
+
+    public boolean whiteTakingBlack(int newRow,int newCol)
+    {
+        return (!isBlack() && (getBoard().getPieceAt(newRow, newCol).isBlack() || getBoard().getPieceAt(newRow,newCol) instanceof EmptyPiece));
+    }
 }

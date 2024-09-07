@@ -16,16 +16,16 @@ public class Knight extends ChessPiece
     @Override
     public boolean isValidMove(int row, int col, int newRow, int newCol)
     {
-        if (this.isBlack() && (!getBoard().getPieceAt(newRow, newCol).isBlack() || getBoard().getPieceAt(newRow,newCol) instanceof EmptyPiece))
-            return bishopMoves(row,col,newRow,newCol);
+        if (blackTakingWhite(newRow,newCol))
+            return knightMoves(row,col,newRow,newCol);
 
-        else if (!this.isBlack() && (getBoard().getPieceAt(newRow, newCol).isBlack() || getBoard().getPieceAt(newRow,newCol) instanceof EmptyPiece))
-            return bishopMoves(row,col,newRow,newCol);
+        else if (whiteTakingBlack(newRow,newCol))
+            return knightMoves(row,col,newRow,newCol);
 
         return false;
     }
 
-    private boolean bishopMoves(int row, int col, int newRow, int newCol)
+    private boolean knightMoves(int row, int col, int newRow, int newCol)
     {
         return (newRow == row - 2 && newCol == col - 1) ||
                 (newRow == row - 2 && newCol == col + 1) ||

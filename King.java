@@ -16,10 +16,10 @@ public class King extends ChessPiece
     @Override
     public boolean isValidMove(int row, int col, int newRow, int newCol)
     {
-        if (this.isBlack() && (!getBoard().getPieceAt(newRow, newCol).isBlack() || getBoard().getPieceAt(newRow,newCol) instanceof EmptyPiece))
+        if (blackTakingWhite(newRow,newCol))
             return kingMoves(row,col,newRow,newCol);
 
-        else if (!this.isBlack() && (getBoard().getPieceAt(newRow, newCol).isBlack() || getBoard().getPieceAt(newRow,newCol) instanceof EmptyPiece))
+        else if (whiteTakingBlack(newRow,newCol))
             return kingMoves(row,col,newRow,newCol);
 
         return false;

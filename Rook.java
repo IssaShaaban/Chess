@@ -14,7 +14,76 @@ public class Rook extends ChessPiece
             this.setPieceIcon("wRook");
     }
     @Override
-    public boolean isValidMove(int row, int col, int newRow, int newCol) {
+    public boolean isValidMove(int row, int col, int newRow, int newCol)
+    {
+        if (blackTakingWhite(newRow,newCol) && (row == newRow || col == newCol))
+                return noRoute(row,col,newRow,newCol);
+
+        if (whiteTakingBlack(newRow,newCol) && (row == newRow || col == newCol))
+            return noRoute(row,col,newRow,newCol);
+
         return false;
+    }
+
+    private boolean noRoute(int row, int col, int newRow, int newCol)
+    {
+        if (newRow == row)
+        {
+            if (col < newCol)
+            {
+                while (col < newCol)
+                {
+                    col++;
+                    if (col == newCol)
+                        return true;
+
+                    if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
+                        return false;
+                }
+            }
+
+            else if (col > newCol)
+            {
+                while (col > newCol)
+                {
+                    col--;
+                    if (col == newCol)
+                        return true;
+
+                    if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
+                        return false;
+                }
+            }
+        }
+
+        if (newCol == col)
+        {
+            if (row < newRow)
+            {
+                while (row < newRow)
+                {
+                    row++;
+                    if (row == newRow)
+                        return true;
+
+                    if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
+                        return false;
+                }
+            }
+
+            else if (row > newRow)
+            {
+                while (row > newRow)
+                {
+                    row--;
+                    if (row == newRow)
+                        return true;
+
+                    if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
+                        return false;
+                }
+            }
+        }
+        return true;
     }
 }
