@@ -13,4 +13,8 @@ public class King extends ChessPiece
         else
             this.setPieceIcon("wKing");
     }
+    @Override
+    public boolean isValidMove(int row, int col, int newRow, int newCol) {
+        return false;
+    }
 }

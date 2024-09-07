@@ -117,4 +117,12 @@ public class ChessBoard extends JPanel
     {
         board[row][col].setBackground(new Color(236, 240, 194));
     }
+
+    public void unHighlight(int row, int col)
+    {
+        if ((row + col) % 2 == 0)
+            board[row][col].setBackground(Color.WHITE);
+        else
+            board[row][col].setBackground(Color.BLACK);
+    }
 }

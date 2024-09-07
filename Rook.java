@@ -13,4 +13,8 @@ public class Rook extends ChessPiece
         else
             this.setPieceIcon("wRook");
     }
+    @Override
+    public boolean isValidMove(int row, int col, int newRow, int newCol) {
+        return false;
+    }
 }

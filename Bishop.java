@@ -15,11 +15,7 @@ public class Bishop extends ChessPiece
     }
 
     @Override
-    public void actionPerformed(ActionEvent e)
-    {
-        if (this.getBoard().getCurrentPiece() == null)
-            this.getBoard().setCurrentPiece(this);
-
-        System.out.println("Pressed " + this.getClass().getName() + " " + this.getRow() + " " + this.getCol());
+    public boolean isValidMove(int row, int col, int newRow, int newCol) {
+        return false;
     }
 }

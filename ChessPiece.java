@@ -8,7 +8,7 @@ public abstract class ChessPiece extends JButton implements ActionListener
     private final HashMap<String,Icon> icons;
     private int row, col;
     private final ChessBoard board;
-    private boolean isBlack;
+    private final boolean isBlack;
 
     public ChessPiece(int row,int col,boolean isBlack,ChessBoard board)
     {
@@ -49,5 +49,12 @@ public abstract class ChessPiece extends JButton implements ActionListener
     public ChessBoard getBoard()
     {
         return board;
+    }
+
+    public abstract boolean isValidMove(int row,int col,int newRow,int newCol);
+
+    public boolean isBlack()
+    {
+        return isBlack;
     }
 }
