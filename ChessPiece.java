@@ -35,7 +35,6 @@ public abstract class ChessPiece extends JButton implements ActionListener
             if (newPiece != null && newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(), this.getRow(), this.getCol()))
             {
                 this.getBoard().setPiecePos(this.getRow(), this.getCol(), this.getBoard().getCurrentPiece());
-                this.getBoard().setCurrentPiece(null);
             }
             else
                 JOptionPane.showMessageDialog(this.getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
