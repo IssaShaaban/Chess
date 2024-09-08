@@ -4,7 +4,6 @@ import java.awt.*;
 public class ChessBoard extends JPanel
 {
     private ChessPiece[][] board = new ChessPiece[8][8];
-    private boolean canMove = false;
     private ChessPiece currentPiece = null;
 
     public ChessBoard()
@@ -69,7 +68,7 @@ public class ChessBoard extends JPanel
         board[newRow][newCol] = piece;
         piece.setPosition(newRow, newCol);
 
-        this.removeAll();
+        removeAll();
         for (int row=0; row<8; row++)
         {
             for (int col = 0; col < 8; col++)
@@ -78,8 +77,9 @@ public class ChessBoard extends JPanel
             }
         }
 
-        this.revalidate();
-        this.repaint();
+        revalidate();
+        repaint();
+        setCurrentPiece(null);
     }
 
     public void addPiece(int row, int col)

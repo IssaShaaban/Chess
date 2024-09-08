@@ -1,6 +1,3 @@
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-
 public class Pawn extends ChessPiece
 {
     public Pawn(int row, int col,boolean isBlack,ChessBoard board)

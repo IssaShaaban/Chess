@@ -1,5 +1,3 @@
-import java.awt.event.ActionEvent;
-
 public class Rook extends ChessPiece
 {
     public Rook(int row, int col,boolean isBlack,ChessBoard board)
@@ -17,15 +15,15 @@ public class Rook extends ChessPiece
     public boolean isValidMove(int row, int col, int newRow, int newCol)
     {
         if (blackTakingWhite(newRow,newCol) && (row == newRow || col == newCol))
-                return noRoute(row,col,newRow,newCol);
+                return rookMoves(row,col,newRow,newCol);
 
         if (whiteTakingBlack(newRow,newCol) && (row == newRow || col == newCol))
-            return noRoute(row,col,newRow,newCol);
+            return rookMoves(row,col,newRow,newCol);
 
         return false;
     }
 
-    private boolean noRoute(int row, int col, int newRow, int newCol)
+    private boolean rookMoves(int row, int col, int newRow, int newCol)
     {
         if (newRow == row)
         {
@@ -84,6 +82,6 @@ public class Rook extends ChessPiece
                 }
             }
         }
-        return true;
+        return false;
     }
 }
