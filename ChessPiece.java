@@ -34,6 +34,7 @@ public abstract class ChessPiece extends JButton implements ActionListener
             newPiece = getBoard().getCurrentPiece();
             if (newPiece != null && newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(),getRow(),getCol()))
             {
+                getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
                 getBoard().setPiecePos(getRow(), getCol(), getBoard().getCurrentPiece());
             }
             else

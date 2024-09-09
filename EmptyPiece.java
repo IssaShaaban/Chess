@@ -13,14 +13,15 @@ public class EmptyPiece extends ChessPiece
     {
         if (this.getBoard().getCurrentPiece() != null)
         {
-            newPiece = this.getBoard().getCurrentPiece();
-            if (newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(), this.getRow(), this.getCol()))
+            newPiece = getBoard().getCurrentPiece();
+            if (newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(), getRow(), getCol()))
             {
-                this.getBoard().setPiecePos(this.getRow(), this.getCol(), newPiece);
-                this.getBoard().setCurrentPiece(null);
+                getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
+                getBoard().setPiecePos(getRow(), getCol(), newPiece);
+                getBoard().setCurrentPiece(null);
             }
             else
-                JOptionPane.showMessageDialog(this.getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
+                JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
 
             newPiece = null;
         }

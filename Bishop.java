@@ -15,17 +15,11 @@ public class Bishop extends ChessPiece
     @Override
     public boolean isValidMove(int row, int col, int newRow, int newCol)
     {
-        if (blackTakingWhite(newRow, newCol) && getBoard().getBlacksTurn())
-        {
-            getBoard().setBlacksTurn(false);
+        if (blackTakingWhite(newRow, newCol))
             return bishopMove(row,col,newRow,newCol);
-        }
 
-        if (whiteTakingBlack(newRow, newCol) && !getBoard().getBlacksTurn())
-        {
-            getBoard().setBlacksTurn(true);
+        if (whiteTakingBlack(newRow, newCol))
             return bishopMove(row,col,newRow,newCol);
-        }
 
         return false;
     }
