@@ -5,6 +5,7 @@ public class ChessBoard extends JPanel
 {
     private ChessPiece[][] board = new ChessPiece[8][8];
     private ChessPiece currentPiece = null;
+    private boolean blacksTurn = false;
 
     public ChessBoard()
     {
@@ -118,5 +119,15 @@ public class ChessBoard extends JPanel
     public ChessPiece getPieceAt(int row, int col)
     {
         return board[row][col];
+    }
+
+    public void setBlacksTurn(boolean blacksTurn)
+    {
+        this.blacksTurn = blacksTurn;
+    }
+
+    public boolean getBlacksTurn()
+    {
+        return blacksTurn;
     }
 }

@@ -23,30 +23,45 @@ public abstract class ChessPiece extends JButton implements ActionListener
 
     public void actionPerformed(ActionEvent e)
     {
-        if (this.getBoard().getCurrentPiece() == this)
+        if (getBoard().getCurrentPiece() == this)
         {
-            this.getBoard().unHighlight(this.getRow(),this.getCol());
-            this.getBoard().setCurrentPiece(null);
+            getBoard().unHighlight(this.getRow(),this.getCol());
+            getBoard().setCurrentPiece(null);
         }
 
-        else if (this.getBoard().getCurrentPiece() != null)
+        else if (getBoard().getCurrentPiece() != null)
         {
-            newPiece = this.getBoard().getCurrentPiece();
-            if (newPiece != null && newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(), this.getRow(), this.getCol()))
+            newPiece = getBoard().getCurrentPiece();
+            if (newPiece != null && newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(),getRow(),getCol()))
             {
-                this.getBoard().setPiecePos(this.getRow(), this.getCol(), this.getBoard().getCurrentPiece());
+                getBoard().setPiecePos(getRow(), getCol(), getBoard().getCurrentPiece());
             }
             else
-                JOptionPane.showMessageDialog(this.getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
+                JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
 
             newPiece = null;
             printDebug();
         }
 
-        else if (this.getBoard().getCurrentPiece() == null)
+        else if (getBoard().getCurrentPiece() == null)
         {
-            this.getBoard().highlightPiece(this.getRow(),this.getCol());
-            this.getBoard().setCurrentPiece(this);
+            if (getBoard().getPieceAt(getRow(),getCol()).isBlack && getBoard().getBlacksTurn())
+            {
+                getBoard().highlightPiece(getRow(),getCol());
+                getBoard().setCurrentPiece(this);
+            }
+            else if (!getBoard().getPieceAt(getRow(),getCol()).isBlack && !getBoard().getBlacksTurn())
+            {
+                getBoard().highlightPiece(getRow(),getCol());
+                getBoard().setCurrentPiece(this);
+            }
+            else
+            {
+                String playerMove = "";
+                if (isBlack) playerMove = "White";
+                else playerMove = "Black";
+                JOptionPane.showMessageDialog(getBoard(), "It's " + playerMove + "'s turn!");
+            }
         }
     }
 
