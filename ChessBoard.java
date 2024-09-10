@@ -1,11 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class ChessBoard extends JPanel
 {
     private ChessPiece[][] board = new ChessPiece[8][8];
     private ChessPiece currentPiece = null;
     private boolean blacksTurn = false;
+    private String isInCheck = "";
+    public ArrayList<int[]> blackKingInCheck = new ArrayList<>();
+    public ArrayList<int[]> whiteKingInCheck = new ArrayList<>();
 
     public ChessBoard()
     {
@@ -41,10 +45,10 @@ public class ChessBoard extends JPanel
                     board[row][col] = new Bishop(row,col,true,this);
 
                 else if (row == 0 && col == 3)
-                    board[row][col] = new King(row,col,false,this);
+                    board[row][col] = new King(row, col, false, this);
 
                 else if (row == 7 && col == 3)
-                    board[row][col] = new King(row,col,true,this);
+                    board[row][col] = new King(row, col, true, this);
 
                 else if (row == 0 && col == 4)
                     board[row][col] = new Queen(row,col,false,this);
@@ -129,5 +133,75 @@ public class ChessBoard extends JPanel
     public boolean getBlacksTurn()
     {
         return blacksTurn;
+    }
+
+    private int[] getBlackKingLoc()
+    {
+        for (int row=0; row<8; row++)
+        {
+            for (int col = 0; col < 8; col++)
+            {
+                if ((board[row][col] instanceof King && board[row][col].isBlack()))
+                    return new int[]{row,col};
+            }
+        }
+        return new int[0];
+    }
+
+    private int[] getWhiteKingLoc()
+    {
+        for (int row=0; row<8; row++)
+        {
+            for (int col = 0; col < 8; col++)
+            {
+                if ((board[row][col] instanceof King && !board[row][col].isBlack()))
+                    return new int[]{row,col};
+            }
+        }
+        return new int[0];
+    }
+
+    public void checkState(boolean blacksTurnFinished)
+    {
+        int[] kingLoc;
+        blackKingInCheck.clear();
+        whiteKingInCheck.clear();
+
+        if (!blacksTurnFinished)
+        {
+            kingLoc = getBlackKingLoc();
+            for (int row = 0; row < 8; row++) {
+                for (int col = 0; col < 8; col++) {
+                    if ((board[row][col].isValidMove(row, col, kingLoc[0], kingLoc[1])) && !board[row][col].isBlack())
+                    {
+                        blackKingInCheck.add(new int[]{row,col});
+                        isInCheck = "black";
+                    }
+                }
+            }
+        }
+        else
+        {
+            kingLoc = getWhiteKingLoc();
+            for (int row = 0; row < 8; row++) {
+                for (int col = 0; col < 8; col++) {
+                    if ((board[row][col].isValidMove(row, col, kingLoc[0], kingLoc[1])) && board[row][col].isBlack())
+                    {
+                        whiteKingInCheck.add(new int[]{row,col});
+                        isInCheck = "white";
+                    }
+                }
+            }
+        }
+    }
+
+    public String getIsInCheck()
+    {
+        return isInCheck;
+    }
+
+    public void setIsInCheck(String inCheck)
+    {
+        isInCheck = inCheck;
     }
 }

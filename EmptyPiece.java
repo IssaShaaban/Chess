@@ -23,9 +23,20 @@ public class EmptyPiece extends ChessPiece
             else
                 JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
 
+            getBoard().checkState(newPiece.isBlack());
             newPiece = null;
         }
-        printDebug();
+
+        if (getBoard().getIsInCheck().equals("black"))
+        {
+            System.out.println("In Check Black");
+            getBoard().setIsInCheck("");
+        }
+
+        else if (getBoard().getIsInCheck().equals("white"))
+        {
+            System.out.println("In Check white");
+        }
     }
 
     @Override

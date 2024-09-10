@@ -10,6 +10,7 @@ public abstract class ChessPiece extends JButton implements ActionListener
     private final ChessBoard board;
     private final boolean isBlack;
     ChessPiece newPiece = null;
+    ChessPiece inCheckAllowed = null;
 
     public ChessPiece(int row,int col,boolean isBlack,ChessBoard board)
     {
@@ -23,6 +24,17 @@ public abstract class ChessPiece extends JButton implements ActionListener
 
     public void actionPerformed(ActionEvent e)
     {
+        if (getBoard().getIsInCheck().equals("black"))
+        {
+            System.out.println("In Check Black");
+            getBoard().setIsInCheck("");
+        }
+
+        else if (getBoard().getIsInCheck().equals("white"))
+        {
+            System.out.println("In Check white");
+        }
+
         if (getBoard().getCurrentPiece() == this)
         {
             getBoard().unHighlight(this.getRow(),this.getCol());
@@ -40,8 +52,9 @@ public abstract class ChessPiece extends JButton implements ActionListener
             else
                 JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
 
+            getBoard().checkState(newPiece.isBlack());
             newPiece = null;
-            printDebug();
+
         }
 
         else if (getBoard().getCurrentPiece() == null)
