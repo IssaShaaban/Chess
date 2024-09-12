@@ -23,45 +23,93 @@ public abstract class ChessPiece extends JButton implements ActionListener
 
     public void actionPerformed(ActionEvent e)
     {
-        if (getBoard().getCurrentPiece() == this)
+        if (!getBoard().inCheck)
         {
-            getBoard().unHighlight(this.getRow(),this.getCol());
-            getBoard().setCurrentPiece(null);
+            if (getBoard().getCurrentPiece() == this)
+            {
+                getBoard().unHighlight(this.getRow(),this.getCol());
+                getBoard().setCurrentPiece(null);
+            }
+
+            else if (getBoard().getCurrentPiece() != null)
+            {
+                newPiece = getBoard().getCurrentPiece();
+                if (newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(),getRow(),getCol()))
+                {
+                    getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
+                    getBoard().setPiecePos(getRow(), getCol(), getBoard().getCurrentPiece());
+                }
+                else
+                    JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
+
+                newPiece = null;
+                printDebug();
+            }
+
+            else if (getBoard().getCurrentPiece() == null)
+            {
+                if (getBoard().getPieceAt(getRow(),getCol()).isBlack && getBoard().getBlacksTurn())
+                {
+                    getBoard().highlightPiece(getRow(),getCol());
+                    getBoard().setCurrentPiece(this);
+                }
+                else if (!getBoard().getPieceAt(getRow(),getCol()).isBlack && !getBoard().getBlacksTurn())
+                {
+                    getBoard().highlightPiece(getRow(),getCol());
+                    getBoard().setCurrentPiece(this);
+                }
+                else
+                {
+                    String playerMove = "";
+                    if (isBlack) playerMove = "White";
+                    else playerMove = "Black";
+                    JOptionPane.showMessageDialog(getBoard(), "It's " + playerMove + "'s turn!");
+                }
+            }
         }
 
-        else if (getBoard().getCurrentPiece() != null)
+        else
         {
-            newPiece = getBoard().getCurrentPiece();
-            if (newPiece != null && newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(),getRow(),getCol()))
+            if (getBoard().getCurrentPiece() == this)
             {
-                getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
-                getBoard().setPiecePos(getRow(), getCol(), getBoard().getCurrentPiece());
+                getBoard().unHighlight(this.getRow(),this.getCol());
+                getBoard().setCurrentPiece(null);
             }
-            else
-                JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
 
-            newPiece = null;
-            printDebug();
-        }
+            else if (getBoard().getCurrentPiece() != null)
+            {
+                newPiece = getBoard().getCurrentPiece();
+                if (newPiece.blocksCheck(newPiece.getRow(), newPiece.getCol(),getRow(),getCol()))
+                {
+                    getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
+                    getBoard().setPiecePos(getRow(), getCol(), getBoard().getCurrentPiece());
+                }
+                else
+                    JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
 
-        else if (getBoard().getCurrentPiece() == null)
-        {
-            if (getBoard().getPieceAt(getRow(),getCol()).isBlack && getBoard().getBlacksTurn())
-            {
-                getBoard().highlightPiece(getRow(),getCol());
-                getBoard().setCurrentPiece(this);
+                newPiece = null;
+                printDebug();
             }
-            else if (!getBoard().getPieceAt(getRow(),getCol()).isBlack && !getBoard().getBlacksTurn())
+
+            else if (getBoard().getCurrentPiece() == null)
             {
-                getBoard().highlightPiece(getRow(),getCol());
-                getBoard().setCurrentPiece(this);
-            }
-            else
-            {
-                String playerMove = "";
-                if (isBlack) playerMove = "White";
-                else playerMove = "Black";
-                JOptionPane.showMessageDialog(getBoard(), "It's " + playerMove + "'s turn!");
+                if (getBoard().getPieceAt(getRow(),getCol()).isBlack && getBoard().getBlacksTurn())
+                {
+                    getBoard().highlightPiece(getRow(),getCol());
+                    getBoard().setCurrentPiece(this);
+                }
+                else if (!getBoard().getPieceAt(getRow(),getCol()).isBlack && !getBoard().getBlacksTurn())
+                {
+                    getBoard().highlightPiece(getRow(),getCol());
+                    getBoard().setCurrentPiece(this);
+                }
+                else
+                {
+                    String playerMove = "";
+                    if (isBlack) playerMove = "White";
+                    else playerMove = "Black";
+                    JOptionPane.showMessageDialog(getBoard(), "It's " + playerMove + "'s turn!");
+                }
             }
         }
     }
@@ -106,5 +154,14 @@ public abstract class ChessPiece extends JButton implements ActionListener
     public boolean whiteTakingBlack(int newRow,int newCol)
     {
         return (!isBlack() && (getBoard().getPieceAt(newRow, newCol).isBlack() || getBoard().getPieceAt(newRow,newCol) instanceof EmptyPiece));
+    }
+
+    public boolean blocksCheck(int row,int col,int newRow,int newCol)
+    {
+        if (isValidMove(row,col,newRow,newCol))
+            // Set new piece to its new post block first
+            getBoard().gameCheck();
+
+        return !getBoard().inCheck;
     }
 }

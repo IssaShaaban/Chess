@@ -11,21 +11,37 @@ public class EmptyPiece extends ChessPiece
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if (this.getBoard().getCurrentPiece() != null)
+        if (!getBoard().inCheck)
         {
-            newPiece = getBoard().getCurrentPiece();
-            if (newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(), getRow(), getCol()))
+            if (this.getBoard().getCurrentPiece() != null)
             {
-                getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
-                getBoard().setPiecePos(getRow(), getCol(), newPiece);
-                getBoard().setCurrentPiece(null);
-            }
-            else
-                JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
+                newPiece = getBoard().getCurrentPiece();
+                if (newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(), getRow(), getCol()))
+                {
+                    getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
+                    getBoard().setPiecePos(getRow(), getCol(), newPiece);
+                    getBoard().setCurrentPiece(null);
+                }
+                else
+                    JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
 
-            newPiece = null;
+                newPiece = null;
+            }
         }
-        printDebug();
+        else
+        {
+            if (this.getBoard().getCurrentPiece() != null) {
+                newPiece = getBoard().getCurrentPiece();
+                if (newPiece.blocksCheck(newPiece.getRow(), newPiece.getCol(), getRow(), getCol())) {
+                    getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
+                    getBoard().setPiecePos(getRow(), getCol(), newPiece);
+                    getBoard().setCurrentPiece(null);
+                } else
+                    JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
+
+                newPiece = null;
+            }
+        }
     }
 
     @Override

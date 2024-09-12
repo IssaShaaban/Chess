@@ -1,11 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class ChessBoard extends JPanel
 {
     private ChessPiece[][] board = new ChessPiece[8][8];
     private ChessPiece currentPiece = null;
     private boolean blacksTurn = false;
+    public ArrayList<int[]> blackKingInCheck = new ArrayList<>();
+    public ArrayList<int[]> whiteKingInCheck = new ArrayList<>();
+    public boolean inCheck = false;
 
     public ChessBoard()
     {
@@ -81,6 +85,7 @@ public class ChessBoard extends JPanel
         revalidate();
         repaint();
         setCurrentPiece(null);
+        gameCheck();
     }
 
     public void addPiece(int row, int col)
@@ -129,5 +134,55 @@ public class ChessBoard extends JPanel
     public boolean getBlacksTurn()
     {
         return blacksTurn;
+    }
+
+    private int[] getBlackKingLoc()
+    {
+        for (int row=0; row<8; row++)
+        {
+            for (int col = 0; col < 8; col++)
+            {
+                if ((board[row][col] instanceof King && board[row][col].isBlack()))
+                    return new int[]{row,col};
+            }
+        }
+        return new int[0];
+    }
+
+    private int[] getWhiteKingLoc()
+    {
+        for (int row=0; row<8; row++)
+        {
+            for (int col = 0; col < 8; col++)
+            {
+                if ((board[row][col] instanceof King && !board[row][col].isBlack()))
+                    return new int[]{row,col};
+            }
+        }
+        return new int[0];
+    }
+
+    public void gameCheck()
+    {
+        int[] blackKing = getBlackKingLoc();
+        int[] whiteKing = getWhiteKingLoc();
+        blackKingInCheck.clear();
+        whiteKingInCheck.clear();
+
+            for (int row = 0; row < 8; row++) {
+                for (int col = 0; col < 8; col++) {
+                    if ((board[row][col].isValidMove(row, col, blackKing[0], blackKing[1])) && !board[row][col].isBlack())
+                        blackKingInCheck.add(new int[]{row,col});
+                }
+            }
+
+            for (int row = 0; row < 8; row++) {
+                for (int col = 0; col < 8; col++) {
+                    if ((board[row][col].isValidMove(row, col, whiteKing[0], whiteKing[1])) && board[row][col].isBlack())
+                        whiteKingInCheck.add(new int[]{row,col});
+                }
+            }
+
+        inCheck = !whiteKingInCheck.isEmpty() || !blackKingInCheck.isEmpty();
     }
 }
