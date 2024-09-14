@@ -19,7 +19,7 @@ public class EmptyPiece extends ChessPiece
                 if (newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(), getRow(), getCol()))
                 {
                     getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
-                    getBoard().setPiecePos(getRow(), getCol(), newPiece);
+                    getBoard().setPiecePos(getRow(), getCol(), newPiece,0);
                     getBoard().setCurrentPiece(null);
                 }
                 else
@@ -32,14 +32,16 @@ public class EmptyPiece extends ChessPiece
         {
             if (this.getBoard().getCurrentPiece() != null) {
                 newPiece = getBoard().getCurrentPiece();
-                if (newPiece.blocksCheck(newPiece.getRow(), newPiece.getCol(), getRow(), getCol())) {
+                if (newPiece.blocksCheck(getRow(), getCol(),newPiece)) {
                     getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
-                    getBoard().setPiecePos(getRow(), getCol(), newPiece);
+                    getBoard().setPiecePos(getRow(), getCol(), newPiece,0);
                     getBoard().setCurrentPiece(null);
                 } else
-                    JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
+                    JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move! King is still in Check!!");
 
+                getBoard().unHighlight(newPiece.getRow(),newPiece.getCol());
                 newPiece = null;
+                getBoard().setCurrentPiece(null);
             }
         }
     }

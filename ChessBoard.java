@@ -10,6 +10,7 @@ public class ChessBoard extends JPanel
     public ArrayList<int[]> blackKingInCheck = new ArrayList<>();
     public ArrayList<int[]> whiteKingInCheck = new ArrayList<>();
     public boolean inCheck = false;
+    public ChessPiece[][] gameState = null;
 
     public ChessBoard()
     {
@@ -64,28 +65,34 @@ public class ChessBoard extends JPanel
         }
     }
 
-    public void setPiecePos(int newRow, int newCol, ChessPiece piece)
+    public void setPiecePos(int newRow, int newCol, ChessPiece piece,int flag)
     {
         int oldRow = piece.getRow();
         int oldCol = piece.getCol();
 
         board[oldRow][oldCol] = new EmptyPiece(oldRow, oldCol, this);
         board[newRow][newCol] = piece;
-        piece.setPosition(newRow, newCol);
 
-        removeAll();
-        for (int row=0; row<8; row++)
+        if (flag == 0)
         {
-            for (int col = 0; col < 8; col++)
+            piece.setPosition(newRow, newCol);
+            removeAll();
+            for (int row=0; row<8; row++)
             {
-                addPiece(row,col);
+                for (int col = 0; col < 8; col++)
+                {
+                    addPiece(row,col);
+                }
             }
+
+            revalidate();
+            repaint();
         }
 
-        revalidate();
-        repaint();
         setCurrentPiece(null);
         gameCheck();
+        if (inCheck)
+            JOptionPane.showMessageDialog(this, (blacksTurn ? "Black" : "White") + " king's in check!");
     }
 
     public void addPiece(int row, int col)
@@ -184,5 +191,31 @@ public class ChessBoard extends JPanel
             }
 
         inCheck = !whiteKingInCheck.isEmpty() || !blackKingInCheck.isEmpty();
+    }
+
+    public ChessPiece[][] gameState()
+    {
+        ChessPiece[][] copiedState = new ChessPiece[8][8];
+
+        for (int row = 0; row < 8; row++)
+            System.arraycopy(board[row], 0, copiedState[row], 0, 8);
+
+        return copiedState;
+    }
+
+    public void returnState(ChessPiece[][] oldState)
+    {
+        for (int row = 0; row < 8; row++)
+            System.arraycopy(oldState[row], 0, board[row], 0, 8);
+
+        removeAll();
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                addPiece(row, col);
+            }
+        }
+
+        revalidate();
+        repaint();
     }
 }
