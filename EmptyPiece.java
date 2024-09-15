@@ -11,31 +11,38 @@ public class EmptyPiece extends ChessPiece
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if (this.getBoard().getCurrentPiece() != null)
+        if (!getBoard().inCheck)
         {
-            newPiece = getBoard().getCurrentPiece();
-            if (newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(), getRow(), getCol()))
+            if (this.getBoard().getCurrentPiece() != null)
             {
-                getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
-                getBoard().setPiecePos(getRow(), getCol(), newPiece);
+                newPiece = getBoard().getCurrentPiece();
+                if (newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(), getRow(), getCol()))
+                {
+                    getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
+                    getBoard().setPiecePos(getRow(), getCol(), newPiece,0);
+                    getBoard().setCurrentPiece(null);
+                }
+                else
+                    JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
+
+                newPiece = null;
+            }
+        }
+        else
+        {
+            if (this.getBoard().getCurrentPiece() != null) {
+                newPiece = getBoard().getCurrentPiece();
+                if (newPiece.blocksCheck(getRow(), getCol(),newPiece)) {
+                    getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
+                    getBoard().setPiecePos(getRow(), getCol(), newPiece,0);
+                    getBoard().setCurrentPiece(null);
+                } else
+                    JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move! King is still in Check!!");
+
+                getBoard().unHighlight(newPiece.getRow(),newPiece.getCol());
+                newPiece = null;
                 getBoard().setCurrentPiece(null);
             }
-            else
-                JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
-
-            getBoard().checkState(newPiece.isBlack());
-            newPiece = null;
-        }
-
-        if (getBoard().getIsInCheck().equals("black"))
-        {
-            System.out.println("In Check Black");
-            getBoard().setIsInCheck("");
-        }
-
-        else if (getBoard().getIsInCheck().equals("white"))
-        {
-            System.out.println("In Check white");
         }
     }
 
