@@ -11,12 +11,12 @@ public class EmptyPiece extends ChessPiece
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if (!getBoard().inCheck)
+        if (!getBoard().getInCheck(isBlack()))
         {
             if (this.getBoard().getCurrentPiece() != null)
             {
                 newPiece = getBoard().getCurrentPiece();
-                if (newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(), getRow(), getCol()))
+                if (newPiece.blocksCheck(getRow(), getCol(),newPiece))
                 {
                     getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
                     getBoard().setPiecePos(getRow(), getCol(), newPiece,0);
@@ -32,12 +32,18 @@ public class EmptyPiece extends ChessPiece
         {
             if (this.getBoard().getCurrentPiece() != null) {
                 newPiece = getBoard().getCurrentPiece();
-                if (newPiece.blocksCheck(getRow(), getCol(),newPiece)) {
+                if (newPiece.blocksCheck(getRow(), getCol(),newPiece))
+                {
                     getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
                     getBoard().setPiecePos(getRow(), getCol(), newPiece,0);
                     getBoard().setCurrentPiece(null);
-                } else
-                    JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move! King is still in Check!!");
+                }
+                else if (newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(), getRow(), getCol()) && getBoard().getInCheck(isBlack()))
+                {
+                    JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
+                }
+                else
+                    JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move! King is in Check!!");
 
                 getBoard().unHighlight(newPiece.getRow(),newPiece.getCol());
                 newPiece = null;

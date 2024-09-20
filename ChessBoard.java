@@ -9,8 +9,7 @@ public class ChessBoard extends JPanel
     private boolean blacksTurn = false;
     public ArrayList<int[]> blackKingInCheck = new ArrayList<>();
     public ArrayList<int[]> whiteKingInCheck = new ArrayList<>();
-    public boolean inCheck = false;
-    public ChessPiece[][] gameState = null;
+    public boolean[] inCheck = new boolean[2];
 
     public ChessBoard()
     {
@@ -91,8 +90,10 @@ public class ChessBoard extends JPanel
 
         setCurrentPiece(null);
         gameCheck();
-        if (inCheck)
-            JOptionPane.showMessageDialog(this, (blacksTurn ? "Black" : "White") + " king's in check!");
+        /*if (inCheck[0])
+            JOptionPane.showMessageDialog(this,  "Black king's in check!");
+        else if (inCheck[1])
+            JOptionPane.showMessageDialog(this,  "White king's in check!");*/
     }
 
     public void addPiece(int row, int col)
@@ -190,7 +191,8 @@ public class ChessBoard extends JPanel
                 }
             }
 
-        inCheck = !whiteKingInCheck.isEmpty() || !blackKingInCheck.isEmpty();
+        inCheck[0] = !blackKingInCheck.isEmpty();
+        inCheck[1] = !whiteKingInCheck.isEmpty();
     }
 
     public ChessPiece[][] gameState()
@@ -217,5 +219,13 @@ public class ChessBoard extends JPanel
 
         revalidate();
         repaint();
+    }
+
+    public boolean getInCheck(boolean isBlack)
+    {
+        if (isBlack)
+            return inCheck[0];
+        else
+            return inCheck[1];
     }
 }

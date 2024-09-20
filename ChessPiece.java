@@ -23,7 +23,7 @@ public abstract class ChessPiece extends JButton implements ActionListener
 
     public void actionPerformed(ActionEvent e)
     {
-        if (!getBoard().inCheck)
+        if (!getBoard().getInCheck(isBlack()))
         {
             if (getBoard().getCurrentPiece() == this)
             {
@@ -34,7 +34,7 @@ public abstract class ChessPiece extends JButton implements ActionListener
             else if (getBoard().getCurrentPiece() != null)
             {
                 newPiece = getBoard().getCurrentPiece();
-                if (newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(),getRow(),getCol()))
+                if (newPiece.blocksCheck(getRow(), getCol(),newPiece))
                 {
                     getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
                     getBoard().setPiecePos(getRow(), getCol(), newPiece,0);
@@ -78,8 +78,12 @@ public abstract class ChessPiece extends JButton implements ActionListener
                     getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
                     getBoard().setPiecePos(getRow(), getCol(), newPiece,0);
                 }
+                else if (newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(), getRow(), getCol()) && getBoard().getInCheck(isBlack))
+                {
+                    JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
+                }
                 else
-                    JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move! King is still in Check!!");
+                    JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move! King is in Check!!");
 
                 getBoard().unHighlight(newPiece.getRow(),newPiece.getCol());
                 newPiece = null;
@@ -153,7 +157,7 @@ public abstract class ChessPiece extends JButton implements ActionListener
             ChessPiece[][] state = getBoard().gameState();
             getBoard().setPiecePos(newRow, newCol, piece, 1);
 
-            boolean kingInCheck = getBoard().inCheck;
+            boolean kingInCheck = getBoard().getInCheck(isBlack());
             getBoard().returnState(state);
 
             return !kingInCheck;
