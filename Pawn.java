@@ -13,28 +13,29 @@ public class Pawn extends ChessPiece
     }
 
     @Override
-    public boolean isValidMove(int row,int col,int newRow,int newCol)
+    public boolean isValidMove(int row, int col, int newRow, int newCol)
     {
+        Boolean newPieceColour = getBoard().getPieceAt(newRow,newCol).isBlack();
 
-        if (this.isBlack() && !getBoard().getPieceAt(newRow,newCol).isBlack() && !(getBoard().getPieceAt(newRow,newCol) instanceof EmptyPiece))
+        if (isBlack() && newPieceColour == null) // Black moving to an empty square
+            {
+                if (row == 6) return (newRow == row - 2 && newCol == col) && (getBoard().getPieceAt(row - 1, col).isBlack() == null)
+                        || newRow == row - 1 && newCol == col;
+                else return newRow == row - 1 && newCol == col;
+            }
+
+        if (!isBlack() && newPieceColour == null) // White moving to an empty square
+            {
+                if (row == 1) return (newRow == row + 2 && newCol == col) && (getBoard().getPieceAt(row + 1, col).isBlack() == null)
+                        || newRow == row + 1 && newCol == col;
+                else return newRow == row + 1 && newCol == col;
+            }
+
+        if (this.isBlack() && !newPieceColour) // Black capturing
             return newRow == row - 1 && (newCol == col + 1 || newCol == col - 1);
 
-        if (row == 6 && this.isBlack())
-            if (((newRow == row - 2 && newCol == col) && (getBoard().getPieceAt(row-1,col) instanceof EmptyPiece)) || (newRow == row - 1 && newCol == col))
-                return true;
-
-        if (this.isBlack())
-            return newRow == row - 1 && newCol == col;
-
-        if (!this.isBlack() && getBoard().getPieceAt(newRow,newCol).isBlack() && !(getBoard().getPieceAt(newRow,newCol) instanceof EmptyPiece) && !getBoard().getBlacksTurn())
+        if (!this.isBlack() && getBoard().getPieceAt(newRow,newCol).isBlack()) // White capturing
             return newRow == row + 1 && (newCol == col + 1 || newCol == col - 1);
-
-        if (row == 1 && !this.isBlack())
-            if (((newRow == row + 2 && newCol == col) && (getBoard().getPieceAt(row+1,col) instanceof EmptyPiece)) || (newRow == row + 1 && newCol == col))
-                return true;
-
-        if (!this.isBlack())
-            return newRow == row + 1 && newCol == col;
 
         return false;
     }

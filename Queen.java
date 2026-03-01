@@ -1,5 +1,3 @@
-import java.awt.*;
-
 public class Queen extends ChessPiece
 {
     public Queen(int row, int col,boolean isBlack,ChessBoard board)
@@ -13,17 +11,6 @@ public class Queen extends ChessPiece
         else
             this.setPieceIcon("wQueen");
     }
-    @Override
-    public boolean isValidMove(int row, int col, int newRow, int newCol)
-    {
-        if (blackTakingWhite(newRow, newCol))
-            return queenMove(row, col, newRow, newCol);
-
-        if (whiteTakingBlack(newRow, newCol))
-            return queenMove(row, col, newRow, newCol);
-
-        return false;
-    }
 
     private boolean rightUpDiagonal(int row, int col, int newRow, int newCol)
     {
@@ -31,11 +18,9 @@ public class Queen extends ChessPiece
         {
             row--;
             col++;
+
             if (row == newRow && col == newCol)
                 return true;
-
-            if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
-                return false;
         }
         return false;
     }
@@ -49,9 +34,6 @@ public class Queen extends ChessPiece
 
             if (row == newRow && col == newCol)
                 return true;
-
-            if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
-                return false;
         }
         return false;
     }
@@ -65,9 +47,6 @@ public class Queen extends ChessPiece
 
             if (row == newRow && col == newCol)
                 return true;
-
-            if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
-                return false;
         }
         return false;
     }
@@ -81,9 +60,6 @@ public class Queen extends ChessPiece
 
             if (row == newRow && col == newCol)
                 return true;
-
-            if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
-                return false;
         }
         return false;
     }
@@ -99,10 +75,6 @@ public class Queen extends ChessPiece
                     col++;
                     if (col == newCol)
                         return true;
-
-                    if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
-                        return false;
-
                 }
             }
 
@@ -113,9 +85,6 @@ public class Queen extends ChessPiece
                     col--;
                     if (col == newCol)
                         return true;
-
-                    if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
-                        return false;
                 }
             }
         }
@@ -129,9 +98,6 @@ public class Queen extends ChessPiece
                     row++;
                     if (row == newRow)
                         return true;
-
-                    if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
-                        return false;
                 }
             }
 
@@ -142,16 +108,14 @@ public class Queen extends ChessPiece
                     row--;
                     if (row == newRow)
                         return true;
-
-                    if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
-                        return false;
                 }
             }
         }
         return false;
     }
 
-    private boolean queenMove(int row, int col, int newRow, int newCol)
+    @Override
+    public boolean isValidMove(int row, int col, int newRow, int newCol)
     {
         if (newRow < row && newCol > col)
             return rightUpDiagonal(row, col, newRow, newCol);
@@ -165,9 +129,6 @@ public class Queen extends ChessPiece
         if (newRow < row && newCol < col)
             return leftUpDiagonal(row,col,newRow,newCol);
 
-        if (row == newRow || col == newCol)
-            return verticalAndHorizontal(row,col,newRow,newCol);
-
-        return  false;
+        return verticalAndHorizontal(row,col,newRow,newCol);
     }
 }

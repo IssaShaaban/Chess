@@ -12,18 +12,6 @@ public class Bishop extends ChessPiece
             this.setPieceIcon("wBishop");
     }
 
-    @Override
-    public boolean isValidMove(int row, int col, int newRow, int newCol)
-    {
-        if (blackTakingWhite(newRow, newCol))
-            return bishopMove(row,col,newRow,newCol);
-
-        if (whiteTakingBlack(newRow, newCol))
-            return bishopMove(row,col,newRow,newCol);
-
-        return false;
-    }
-
     private boolean rightUpDiagonal(int row, int col, int newRow, int newCol)
     {
         while (newRow < row && newCol > col)
@@ -32,9 +20,6 @@ public class Bishop extends ChessPiece
             col++;
             if (row == newRow && col == newCol)
                 return true;
-
-            if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
-                return false;
         }
         return false;
     }
@@ -48,9 +33,6 @@ public class Bishop extends ChessPiece
 
             if (row == newRow && col == newCol)
                 return true;
-
-            if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
-                return false;
         }
         return false;
     }
@@ -64,9 +46,6 @@ public class Bishop extends ChessPiece
 
             if (row == newRow && col == newCol)
                 return true;
-
-            if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
-                return false;
         }
         return false;
     }
@@ -80,14 +59,12 @@ public class Bishop extends ChessPiece
 
             if (row == newRow && col == newCol)
                 return true;
-
-            if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
-                return false;
         }
         return false;
     }
 
-    private boolean bishopMove(int row, int col, int newRow, int newCol)
+    @Override
+    public boolean isValidMove(int row, int col, int newRow, int newCol)
     {
         if (newRow < row && newCol > col)
             return rightUpDiagonal(row, col, newRow, newCol);

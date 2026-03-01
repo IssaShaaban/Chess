@@ -11,19 +11,9 @@ public class King extends ChessPiece
         else
             this.setPieceIcon("wKing");
     }
+
     @Override
     public boolean isValidMove(int row, int col, int newRow, int newCol)
-    {
-        if (blackTakingWhite(newRow,newCol))
-            return kingMove(row,col,newRow,newCol);
-
-        else if (whiteTakingBlack(newRow,newCol))
-            return kingMove(row,col,newRow,newCol);
-
-        return false;
-    }
-
-    private boolean kingMove(int row, int col, int newRow, int newCol)
     {
         return (newRow == row && newCol == col - 1) ||
                 (newRow == row && newCol == col + 1) ||

@@ -1,29 +1,43 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.HashMap;
 
-public abstract class ChessPiece extends JButton implements ActionListener
+public class ChessPiece extends EmptyChessPiece
 {
-    private final HashMap<String,Icon> icons;
-    private int row, col;
-    private final ChessBoard board;
-    private final boolean isBlack;
-    ChessPiece newPiece = null;
+    private final Boolean isBlack;
 
     public ChessPiece(int row,int col,boolean isBlack,ChessBoard board)
     {
-        this.addActionListener(this);
-        this.row = row;
-        this.col = col;
-        this.board = board;
+        super(row,col,board);
         this.isBlack = isBlack;
-        icons = ChessIcons.getIcons();
     }
 
+    public ChessPiece(int row,int col,ChessBoard board)
+    {
+        super(row,col,board);
+        isBlack = null;
+    }
+
+    @Override
     public void actionPerformed(ActionEvent e)
     {
-        if (!getBoard().getInCheck(isBlack()))
+        if (isBlack == null) // Moving to an empty square
+            {
+                newPiece = getBoard().getCurrentPiece();
+                if (newPiece != null)
+                {
+                    if (newPiece.pieceMove(newPiece.getRow(), newPiece.getCol(), getRow(), getCol()))
+                    {
+                        getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
+                        getBoard().setPiecePos(getRow(), getCol(), newPiece);
+                        getBoard().setCurrentPiece(null);
+                        newPiece = null;
+                    }
+                    else
+                        JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
+                }
+            }
+
+        else if (!getBoard().getInCheck(isBlack()))
         {
             if (getBoard().getCurrentPiece() == this)
             {
@@ -34,10 +48,10 @@ public abstract class ChessPiece extends JButton implements ActionListener
             else if (getBoard().getCurrentPiece() != null)
             {
                 newPiece = getBoard().getCurrentPiece();
-                if (newPiece.blocksCheck(getRow(), getCol(),newPiece))
+                if (newPiece.pieceMove(newPiece.getRow(), newPiece.getCol(), getRow(), getCol()))
                 {
                     getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
-                    getBoard().setPiecePos(getRow(), getCol(), newPiece,0);
+                    getBoard().setPiecePos(getRow(), getCol(), newPiece);
                 }
                 else
                     JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
@@ -73,12 +87,12 @@ public abstract class ChessPiece extends JButton implements ActionListener
             else if (getBoard().getCurrentPiece() != null)
             {
                 newPiece = getBoard().getCurrentPiece();
-                if (newPiece.blocksCheck(getRow(),getCol(),newPiece))
+                if (newPiece.pieceMove(newPiece.getRow(), newPiece.getCol(), getRow(), getCol()))
                 {
                     getBoard().setBlacksTurn(!getBoard().getBlacksTurn());
-                    getBoard().setPiecePos(getRow(), getCol(), newPiece,0);
+                    getBoard().setPiecePos(getRow(), getCol(), newPiece);
                 }
-                else if (newPiece.isValidMove(newPiece.getRow(), newPiece.getCol(), getRow(), getCol()) && getBoard().getInCheck(isBlack))
+                else if (newPiece.pieceMove(newPiece.getRow(), newPiece.getCol(), getRow(), getCol()) && getBoard().getInCheck(isBlack))
                 {
                     JOptionPane.showMessageDialog(getBoard(), "Invalid " + newPiece.getClass().getName() + " move!");
                 }
@@ -108,61 +122,31 @@ public abstract class ChessPiece extends JButton implements ActionListener
         }
     }
 
-    public void setPieceIcon(String icon)
+    public boolean pieceMove(int row, int col, int newRow, int newCol)
     {
-        Icon useIcon = icons.get(icon);
-        this.setIcon(useIcon);
+        if (blackMove(newRow, newCol) || whiteMove(newRow, newCol))
+            return isValidMove(row, col, newRow, newCol);
+
+        return false;
     }
 
-    public int getRow() {return row;}
-    public int getCol() {return col;}
-
-    public void setPosition(int row, int col)
+    public boolean isValidMove(int row, int col, int newRow, int newCol)
     {
-        this.row = row;
-        this.col = col;
+        return false;
     }
 
-    public ChessBoard getBoard()
-    {
-        return board;
-    }
-
-    public abstract boolean isValidMove(int row,int col,int newRow,int newCol);
-
-    public boolean isBlack()
+    public Boolean isBlack()
     {
         return isBlack;
     }
 
-    public void printDebug()
+    public boolean blackMove(int newRow, int newCol)
     {
-        System.out.println("Pressed " + this.getClass().getName() + " " + this.getRow() + " " + this.getCol());
+        return (isBlack() && (getBoard().getPieceAt(newRow,newCol).isBlack() == null || !getBoard().getPieceAt(newRow, newCol).isBlack()));
     }
 
-    public boolean blackTakingWhite(int newRow,int newCol)
+    public boolean whiteMove(int newRow, int newCol)
     {
-        return (isBlack() && (!getBoard().getPieceAt(newRow, newCol).isBlack() || getBoard().getPieceAt(newRow,newCol) instanceof EmptyPiece));
-    }
-
-    public boolean whiteTakingBlack(int newRow,int newCol)
-    {
-        return (!isBlack() && (getBoard().getPieceAt(newRow, newCol).isBlack() || getBoard().getPieceAt(newRow,newCol) instanceof EmptyPiece));
-    }
-
-    public boolean blocksCheck(int newRow, int newCol, ChessPiece piece)
-    {
-        if (isValidMove(piece.getRow(), piece.getCol(), newRow, newCol))
-        {
-            ChessPiece[][] state = getBoard().gameState();
-            getBoard().setPiecePos(newRow, newCol, piece, 1);
-
-            boolean kingInCheck = getBoard().getInCheck(isBlack());
-            getBoard().returnState(state);
-
-            return !kingInCheck;
-        }
-
-        return false;
+        return (!isBlack() && (getBoard().getPieceAt(newRow,newCol).isBlack() == null ||getBoard().getPieceAt(newRow, newCol).isBlack()));
     }
 }

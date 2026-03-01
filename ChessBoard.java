@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ChessBoard extends JPanel
 {
-    private ChessPiece[][] board = new ChessPiece[8][8];
+    private final ChessPiece[][] board = new ChessPiece[8][8];
     private ChessPiece currentPiece = null;
     private boolean blacksTurn = false;
     public ArrayList<int[]> blackKingInCheck = new ArrayList<>();
@@ -50,58 +50,49 @@ public class ChessBoard extends JPanel
                 else if (row == 7 && col == 3)
                     board[row][col] = new King(row,col,true,this);
 
-                else if (row == 0 && col == 4)
+                else if (row == 0)
                     board[row][col] = new Queen(row,col,false,this);
 
-                else if (row == 7 && col == 4)
+                else if (row == 7)
                     board[row][col] = new Queen(row,col,true,this);
 
                 else
-                    board[row][col] = new EmptyPiece(row,col,this);
+                    board[row][col] = new ChessPiece(row,col,this);
 
-                addPiece(row,col);
+                addBackground(row,col);
             }
         }
     }
 
-    public void setPiecePos(int newRow, int newCol, ChessPiece piece,int flag)
+    public void setPiecePos(int newRow, int newCol, ChessPiece piece)
     {
         int oldRow = piece.getRow();
         int oldCol = piece.getCol();
 
-        board[oldRow][oldCol] = new EmptyPiece(oldRow, oldCol, this);
+        board[oldRow][oldCol] = new ChessPiece(oldRow, oldCol, this);
         board[newRow][newCol] = piece;
 
-        if (flag == 0)
+        piece.setPosition(newRow, newCol);
+        removeAll();
+        for (int row=0; row<8; row++)
         {
-            piece.setPosition(newRow, newCol);
-            removeAll();
-            for (int row=0; row<8; row++)
+            for (int col = 0; col < 8; col++)
             {
-                for (int col = 0; col < 8; col++)
-                {
-                    addPiece(row,col);
-                }
+                addBackground(row,col);
             }
-
-            revalidate();
-            repaint();
         }
 
+        revalidate();
+        repaint();
         setCurrentPiece(null);
-        gameCheck();
-        /*if (inCheck[0])
-            JOptionPane.showMessageDialog(this,  "Black king's in check!");
-        else if (inCheck[1])
-            JOptionPane.showMessageDialog(this,  "White king's in check!");*/
     }
 
-    public void addPiece(int row, int col)
+    public void addBackground(int row, int col)
     {
         if ((row + col) % 2 == 0)
-            board[row][col].setBackground(Color.WHITE);
+            board[row][col].setBackground(new Color(240, 217, 181));
         else
-            board[row][col].setBackground(Color.BLACK);
+            board[row][col].setBackground(new Color(181, 136, 99));
 
         this.add(board[row][col]);
     }
@@ -124,9 +115,9 @@ public class ChessBoard extends JPanel
     public void unHighlight(int row, int col)
     {
         if ((row + col) % 2 == 0)
-            board[row][col].setBackground(Color.WHITE);
+            board[row][col].setBackground(new Color(240, 217, 181));
         else
-            board[row][col].setBackground(Color.BLACK);
+            board[row][col].setBackground(new Color(181, 136, 99));
     }
 
     public ChessPiece getPieceAt(int row, int col)
@@ -179,14 +170,14 @@ public class ChessBoard extends JPanel
 
             for (int row = 0; row < 8; row++) {
                 for (int col = 0; col < 8; col++) {
-                    if ((board[row][col].isValidMove(row, col, blackKing[0], blackKing[1])) && !board[row][col].isBlack())
+                    if ((board[row][col].pieceMove(row, col, blackKing[0], blackKing[1])) && !board[row][col].isBlack())
                         blackKingInCheck.add(new int[]{row,col});
                 }
             }
 
             for (int row = 0; row < 8; row++) {
                 for (int col = 0; col < 8; col++) {
-                    if ((board[row][col].isValidMove(row, col, whiteKing[0], whiteKing[1])) && board[row][col].isBlack())
+                    if ((board[row][col].pieceMove(row, col, whiteKing[0], whiteKing[1])) && board[row][col].isBlack())
                         whiteKingInCheck.add(new int[]{row,col});
                 }
             }
@@ -213,7 +204,7 @@ public class ChessBoard extends JPanel
         removeAll();
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
-                addPiece(row, col);
+                addBackground(row, col);
             }
         }
 

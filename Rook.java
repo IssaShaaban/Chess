@@ -11,19 +11,9 @@ public class Rook extends ChessPiece
         else
             this.setPieceIcon("wRook");
     }
+
     @Override
     public boolean isValidMove(int row, int col, int newRow, int newCol)
-    {
-        if (blackTakingWhite(newRow,newCol) && (row == newRow || col == newCol))
-                return rookMoves(row,col,newRow,newCol);
-
-        if (whiteTakingBlack(newRow,newCol) && (row == newRow || col == newCol))
-            return rookMoves(row,col,newRow,newCol);
-
-        return false;
-    }
-
-    private boolean rookMoves(int row, int col, int newRow, int newCol)
     {
         if (newRow == row)
         {
@@ -34,9 +24,6 @@ public class Rook extends ChessPiece
                     col++;
                     if (col == newCol)
                         return true;
-
-                    if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
-                        return false;
                 }
             }
 
@@ -47,9 +34,6 @@ public class Rook extends ChessPiece
                     col--;
                     if (col == newCol)
                         return true;
-
-                    if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
-                        return false;
                 }
             }
         }
@@ -63,9 +47,6 @@ public class Rook extends ChessPiece
                     row++;
                     if (row == newRow)
                         return true;
-
-                    if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
-                        return false;
                 }
             }
 
@@ -76,9 +57,6 @@ public class Rook extends ChessPiece
                     row--;
                     if (row == newRow)
                         return true;
-
-                    if (!(getBoard().getPieceAt(row, col) instanceof EmptyPiece))
-                        return false;
                 }
             }
         }
